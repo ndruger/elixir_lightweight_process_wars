@@ -2,7 +2,7 @@ defmodule ProcessWars.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", ProcessWars.RoomChannel
+  channel "room:*", ProcessWars.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
