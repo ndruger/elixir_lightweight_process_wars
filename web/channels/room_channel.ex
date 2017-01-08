@@ -1,3 +1,63 @@
+defmodule ProcessWars.EnemyChild do
+  use GenServer
+ 
+  # def start_link(opts) do
+  #   {_, name} = opts
+  #   GenServer.start_link(__MODULE__, :ok, [name: name])
+  # end
+  # def start_link(opts) do
+  #   {_, name} = opts
+  #   GenServer.start_link(__MODULE__, :ok, [name: name])
+  # end
+  # def start_link(name) do
+  #   GenServer.start_link(__MODULE__, [name: name])
+  # end
+
+  def start_link() do
+    require IEx; IEx.pry
+    GenServer.start_link(__MODULE__, [])
+  end
+
+  def init(state) do
+    {:ok, state}
+  end
+end
+
+# ProcessWars.EnemySupervisor.start_link([])
+# ProcessWars.EnemySupervisor.create_child("test")
+# pid = Process.whereis(ProcessWars.EnemySupervisor)
+# {_, c_pid, _, _} = Supervisor.which_children(pid) |> Enum.at(0)
+# Process.info(c_pid)
+# Process.exit(c_pid, :kill)
+
+
+defmodule ProcessWars.EnemySupervisor do
+  use Supervisor
+  # use GenServer
+  # use Application
+
+  alias ProcessWars.EnemySupervisor
+  alias ProcessWars.EnemyChild
+
+  def start_link(_args) do
+    Supervisor.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  def create_child() do
+    Supervisor.start_child(EnemySupervisor, [])
+  end
+
+  def init(_args) do
+    children = [
+      worker(EnemyChild, [], restart: :permanent)
+    ]
+    options = [
+      strategy: :simple_one_for_one
+    ]
+    supervise(children, options)
+  end
+end
+
 defmodule ProcessWars.Pid do
   def pid_to_string(pid) when is_pid(pid) do
     pid |> :erlang.pid_to_list |> to_string
