@@ -19,7 +19,7 @@ defmodule ProcessWars.Mixfile do
     [
       mod: {ProcessWars, []},
       applications: [
-        :phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext
+        :phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :uuid
       ]
     ]
   end
@@ -41,6 +41,7 @@ defmodule ProcessWars.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_html, "~> 2.6"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:uuid, "~> 1.1.6"},
     ]
   end
 end

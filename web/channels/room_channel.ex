@@ -1,21 +1,12 @@
 defmodule ProcessWars.EnemyChild do
   use GenServer
- 
-  # def start_link(opts) do
-  #   {_, name} = opts
-  #   GenServer.start_link(__MODULE__, :ok, [name: name])
-  # end
-  # def start_link(opts) do
-  #   {_, name} = opts
-  #   GenServer.start_link(__MODULE__, :ok, [name: name])
-  # end
-  # def start_link(name) do
-  #   GenServer.start_link(__MODULE__, [name: name])
-  # end
 
   def start_link() do
-    require IEx; IEx.pry
     GenServer.start_link(__MODULE__, [])
+  end
+
+  def start_link(name) do
+    GenServer.start_link(__MODULE__, [], name: name)
   end
 
   def init(state) do
@@ -23,8 +14,8 @@ defmodule ProcessWars.EnemyChild do
   end
 end
 
-# ProcessWars.EnemySupervisor.start_link([])
-# ProcessWars.EnemySupervisor.create_child("test")
+# ProcessWars.EnemySupervisor.start_link()
+# ProcessWars.EnemySupervisor.create_child(:test)
 # pid = Process.whereis(ProcessWars.EnemySupervisor)
 # {_, c_pid, _, _} = Supervisor.which_children(pid) |> Enum.at(0)
 # Process.info(c_pid)
@@ -39,12 +30,18 @@ defmodule ProcessWars.EnemySupervisor do
   alias ProcessWars.EnemySupervisor
   alias ProcessWars.EnemyChild
 
-  def start_link(_args) do
-    Supervisor.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link do
+    ran = UUID.uuid4() |> String.split("-") |> List.last
+    name = "enemy_oneForOne_#{ran}" |> String.to_atom
+    IO.inspect(name)
+
+    # Supervisor.start_link(__MODULE__, [], name: __MODULE__)
+    Supervisor.start_link(__MODULE__, [], name: name)
   end
 
-  def create_child() do
-    Supervisor.start_child(EnemySupervisor, [])
+  def create_child(self_name, name) do
+    # Supervisor.start_child(EnemySupervisor, [name])
+    Supervisor.start_child(self_name, [name])
   end
 
   def init(_args) do
