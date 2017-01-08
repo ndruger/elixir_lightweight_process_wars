@@ -1,10 +1,6 @@
 defmodule ProcessWars.EnemyChild do
   use GenServer
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, [])
-  end
-
   def start_link(name) do
     GenServer.start_link(__MODULE__, [], name: name)
   end
@@ -14,41 +10,88 @@ defmodule ProcessWars.EnemyChild do
   end
 end
 
-# ProcessWars.EnemySupervisor.start_link()
-# ProcessWars.EnemySupervisor.create_child(:test)
-# pid = Process.whereis(ProcessWars.EnemySupervisor)
+# Dirty GenServer. I don't want to create gen_server per enemy for visual reason of GAME.
+defmodule ProcessWars.EnemyTimer do
+  use GenServer
+
+  def start_link() do
+    GenServer.start_link(__MODULE__, %{subscribers: []}, name: __MODULE__)
+  end
+
+  def init(state) do
+    schedule()
+    {:ok, state}
+  end
+
+  def handle_info(:publish, state) do
+    Enum.map(state.subscribers, fn {module, method_name, args} ->
+      try do
+        apply(module, method_name, args)
+      rescue
+        e -> IO.inspect(e)
+      end
+    end)
+    schedule
+    {:noreply, state}
+  end
+
+  def handle_call({:register, {module, method_name, args}}, _, state) do
+    subscribers = [{module, method_name, args} | state.subscribers]
+    {:reply, subscribers, %{state | subscribers: subscribers}}
+  end
+
+  defp schedule() do
+    Process.send_after(self(), :publish, 5 * 1000)
+  end
+
+  def register({module, method_name, args}) do
+    GenServer.call(__MODULE__, {:register, {module, method_name, args}})
+  end
+end
+
+defmodule ProcessWars.EnemyFactory do
+  def create(:simple_one_for_one) do
+  end
+end
+
+# ProcessWars.EnemyTimer.start_link()
+# {:ok, pid} = ProcessWars.OneForOneEnemy.start_link()
+# Supervisor.which_children(pid)
 # {_, c_pid, _, _} = Supervisor.which_children(pid) |> Enum.at(0)
 # Process.info(c_pid)
 # Process.exit(c_pid, :kill)
 
+defmodule ProcessWars.EnemyUtil do
+  def build_name(type) do
+    ran = UUID.uuid4() |> String.split("-") |> List.last
+    "enemy_#{type}_#{ran}" |> String.to_atom
+  end
+end
 
-defmodule ProcessWars.EnemySupervisor do
+defmodule ProcessWars.OneForOneEnemy do
   use Supervisor
-  # use GenServer
-  # use Application
 
-  alias ProcessWars.EnemySupervisor
   alias ProcessWars.EnemyChild
+  alias ProcessWars.EnemyUtil
 
   def start_link do
-    ran = UUID.uuid4() |> String.split("-") |> List.last
-    name = "enemy_oneForOne_#{ran}" |> String.to_atom
-    IO.inspect(name)
-
-    # Supervisor.start_link(__MODULE__, [], name: __MODULE__)
-    Supervisor.start_link(__MODULE__, [], name: name)
+    name = EnemyUtil.build_name("simpleOneForOne")
+    Supervisor.start_link(__MODULE__, [name], name: name)
   end
 
-  def create_child(self_name, name) do
-    # Supervisor.start_child(EnemySupervisor, [name])
-    Supervisor.start_child(self_name, [name])
+  def create_child(self_pid) do
+    name = EnemyUtil.build_name("simpleOneForOneChild")
+    Supervisor.start_child(self_pid, [name])
   end
 
   def init(_args) do
+    ProcessWars.EnemyTimer.register({__MODULE__, :create_child, [self()]})
+
     children = [
       worker(EnemyChild, [], restart: :permanent)
     ]
     options = [
+      # strategy: :simple_one_for_one
       strategy: :simple_one_for_one
     ]
     supervise(children, options)
