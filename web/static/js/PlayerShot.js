@@ -6,13 +6,13 @@ import {Position} from './Types';
 
 class PlayerShot extends Movable {
   _speed: number = 0.5;
-  name: string;
+  id: string;
 
-  constructor({name, x, y, svg, world}: {name: string, x: number, y: number, svg: Object, world: World}) {
+  constructor({id, x, y, svg, world}: {id: string, x: number, y: number, svg: Object, world: World}) {
     super({svg, world});
     this._x = x;
     this._y = y;
-    this.name = name;
+    this.id = id;
     this._el = svg.circle(5)
       .addClass('playerShot')
       .fill('#0ff')

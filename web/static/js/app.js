@@ -1,10 +1,11 @@
 // @flow
 import 'phoenix_html';
 import {Socket} from 'phoenix';
-// import _ from 'lodash';
+import _ from 'lodash';
 // import * as d3 from 'd3';
 
 import World from './World';
+import Pid from './Pid';
 
 const socket = new Socket('/socket', {params: {token: window.userToken}});
 
@@ -55,8 +56,8 @@ $(() => {
       width: MAIN_WIDTH,
       height: MAIN_HEIGHT,
       svg: svg,
-      killProcess: (id: string) => {
-        chan.push('kill', {pid: id});
+      killProcess: (safeId: string) => {
+        chan.push('kill', {pid: Pid.toUnSafe(safeId)});
       }
     });
    
@@ -73,13 +74,21 @@ $(() => {
       //   return _.startsWith(process.name, 'enemy');
       // });
       // console.log(enemyProcesses);
-      world.updateEnemies(processes);
+      const safeProcesses = _.map(processes, (process) => {
+        return {
+          ...process,
+          id: Pid.toSafe(process.id),
+        };
+      });
+      world.updateEnemies(safeProcesses);
     });
   });
 
-  // $('body').starfield({
-  //   seedMovement: true
-  // });
+  if (!location.search.includes('debug')) {
+    $('body').starfield({
+      seedMovement: true
+    });
+  }
 });
 
 // let nodes;

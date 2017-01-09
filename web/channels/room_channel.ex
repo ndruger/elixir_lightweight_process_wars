@@ -36,9 +36,4 @@ defmodule ProcessWars.RoomChannel do
     # broadcast! socket, "new_msg", %{body: pid_list}
     {:noreply, socket}
   end
-
-  # def handle_out("new_msg", payload, socket) do
-  #   push socket, "new_msg", payload
-  #   {:noreply, socket}
-  # end
 end

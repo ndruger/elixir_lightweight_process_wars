@@ -33,14 +33,14 @@ class World {
 
   updateEnemies(processes: Array<Object>) {
     const newEnemyProcesses = _.filter(processes, (process) => {
-      const name = process.name;
-      return Enemy.isEnemyName(name) && !this._enemyMap[name];
+      return Enemy.isEnemyName(process.name) && !this._enemyMap[process.id];
     });
-    const deletionTargetNames = _.pullAll(_.keys(this._enemyMap), _.map(processes, 'name'));
+    const deletionTargetNames = _.pullAll(_.keys(this._enemyMap), _.map(processes, 'id'));
     _.each(newEnemyProcesses, (process) => {
       const name = process.name;
-      this._enemyMap[name] = new Enemy({
-        id: process.id,
+      const id = process.id;
+      this._enemyMap[id] = new Enemy({
+        id,
         name: name,
         svg: this._svg,
         world: this,
@@ -50,9 +50,9 @@ class World {
   }
 
   createPlayerShot({x, y}: Position) {
-    const name = uuidLib.v4();
-    this._playerShotMap[name] = new PlayerShot({
-      name,
+    const id = uuidLib.v4();
+    this._playerShotMap[id] = new PlayerShot({
+      id,
       x: x,
       y: y,
       svg: this._svg,
@@ -68,24 +68,25 @@ class World {
   }
 
   checkPlayerShot(shot: PlayerShot) {
-    _.each(this._enemyMap, (enemy) => {
+    const hit = _.some(this._enemyMap, (enemy) => {
       if (shot.canDestroy(enemy.getPosition())) {
         this._killProcess(enemy.id);
+        return true;
       }
     });
-    if (this._isOver(shot.getPosition())) {
-      this._destroyPlayerShot(shot.name);
+    if (hit || this._isOver(shot.getPosition())) {
+      this._destroyPlayerShot(shot.id);
     }
   }
 
-  _destroyEnemy(name: string) {
-    this._enemyMap[name].destroy();
-    delete this._enemyMap[name];
+  _destroyEnemy(id: string) {
+    this._enemyMap[id].destroy();
+    delete this._enemyMap[id];
   }
 
-  _destroyPlayerShot(name: string) {
-    this._playerShotMap[name].destroy();
-    delete this._playerShotMap[name];
+  _destroyPlayerShot(id: string) {
+    this._playerShotMap[id].destroy();
+    delete this._playerShotMap[id];
   }
 
   _step = (progress: number) => {

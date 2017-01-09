@@ -2,6 +2,7 @@ use Croma
 
 defmodule ProcessWars.EnemyFactory do
   alias ProcessWars.EnemyUtil
+  alias ProcessWars.EnemyMonitor
 
   def create("simple_one_for_one") do
     {:ok, pid} = ProcessWars.SimpleOneForOneEnemy.start_link()
@@ -21,5 +22,6 @@ defmodule ProcessWars.EnemyFactory do
   defun delete(pid :: v[pid]) :: boolean do
     IO.inspect(["EnemyFactory.delete", Process.info(pid)])
     Process.exit(pid, :kill)
+    send(ProcessWars.EnemyMonitor, :publish)
   end
 end
