@@ -13,11 +13,13 @@
 
   <body>
     <div class="container">
+      <div class="title">Elixir Lightweight Process Wars - Let's It Crash!! - </div>
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
       </main>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.3.6/svg.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

@@ -1,7 +1,11 @@
 module.exports = {
   "env": {
     "browser": true,
-    "jquery": true
+    "jquery": true,
+    "node": true
+  },
+  "globals": {
+    SVG: true
   },
   "parser": "babel-eslint",
   "extends": "eslint:recommended",

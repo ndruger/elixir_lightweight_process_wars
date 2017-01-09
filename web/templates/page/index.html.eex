@@ -1,5 +1,12 @@
-<div class="jumbotron">
-neko
-  <div id="messages"></div>
+<div class="page">
+<%#   <div id="messages"></div>
   <input id="chat-input" type="text"></input>
+ %>
+  <div id="main">
+    <canvas></canvas>
+    <div id="svg-main"></div>
+    <div class="buttons">
+      <button class="create-simple-one-for-one-enemy">Simple-One-For-One Enemy</button>
+    </div>
+  </div>
 </div>

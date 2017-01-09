@@ -1,9 +1,14 @@
 import 'phoenix_html';
 import {Socket} from 'phoenix';
 import _ from 'lodash';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
+
+import World from './world';
 
 const socket = new Socket('/socket', {params: {token: window.userToken}});
+
+const MAIN_WIDTH = 1000;
+const MAIN_HEIGHT = 600;
 
 const chatInput = $('#chat-input');
 const messagesContainer = $('#messages');
@@ -14,7 +19,8 @@ const chan = socket.channel('room:game', {});
 chatInput.on('keypress', event => {
   if(event.keyCode === 13){
     console.log(event);
-    chan.push('new_msg', {body: chatInput.val()});
+    chan.push('create_enemy', {type: 'simple_one_for_one'});
+    // chan.push("kill", {body: chatInput.val()})
     // chan.push("kill", {body: chatInput.val()})
     chatInput.val('');
   }
@@ -25,14 +31,44 @@ chan.on('new_msg', payload => {
   messagesContainer.append(`<br/>${JSON.stringify(payload.body)}`);
 });
 
-function toSafeId(id) {
-  return id.replace(/\./g, '_').replace(/[\<\>]/g, '');
-  // return id;
-}
-function toId(safeId) {
-  return `<${safeId.replace(/_/g, '.')}>`;
-}
 
+// function toSafeId(id) {
+//   return id.replace(/\./g, '_').replace(/[\<\>]/g, '');
+//   // return id;
+// }
+// function toId(safeId) {
+//   return `<${safeId.replace(/_/g, '.')}>`;
+// }
+
+let oldProcesses = [];
+chan.on('processes', ({processes}) => {
+  console.log(JSON.stringify(_.differenceBy(processes, oldProcesses, 'id')));
+  oldProcesses = processes;
+  const enemyProcesses = _.filter(processes, (process) => {
+    return _.startsWith(process.name, 'enemy');
+  });
+  console.log(enemyProcesses);
+});
+
+chan.join().receive('ok', () => {
+  console.log('Welcome to Phoenix Chat!');
+});
+
+$(() => {
+  const world = new World();
+ 
+  $('.create-simple-one-for-one-enemy').on('click', () => {
+    chan.push('create_enemy', {type: 'simple_one_for_one'});
+  });
+
+  var draw = SVG('svg-main').size(MAIN_WIDTH, MAIN_HEIGHT);
+  var text = draw.text('SVG.JS').move(300, 0);
+  text.font({size: 180});
+
+  // $('body').starfield({
+  //   seedMovement: true
+  // });
+});
 
 // let nodes;
 // let links;
@@ -90,9 +126,6 @@ function toId(safeId) {
 //   // console.log(payload)
 // });
 
-// chan.join().receive('ok', () => {
-//   console.log('Welcome to Phoenix Chat!');
-// });
 
 
 // var width = 2960,
