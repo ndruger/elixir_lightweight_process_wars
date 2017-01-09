@@ -1,3 +1,4 @@
+// @flow
 import 'phoenix_html';
 import {Socket} from 'phoenix';
 import _ from 'lodash';

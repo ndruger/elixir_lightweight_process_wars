@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "eslint": "./node_modules/eslint/bin/eslint.js web/**/*.js",
-    "lint": "npm run eslint",
-    "watch": "node ./node_modules/webpack/bin/webpack.js --colors --watch"
+    "lint": "npm run eslint && npm run flow",
+    "watch": "node ./node_modules/webpack/bin/webpack.js --colors --watch",
+    "flow": "./node_modules/flow-bin/vendor/flow check"
   },
   "dependencies": {
     "d3": "^3.5.17",

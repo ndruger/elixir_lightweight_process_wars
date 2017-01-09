@@ -1,0 +1,72 @@
+.title {
+  text-align: center;
+  font-size: 40px;
+  font-family: "Museo";
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.898039);
+  text-shadow: rgba(255, 255, 255, 0.798039) 0px 0px 15px, rgba(255, 255, 255, 0.68039) 0px 0px 10px;
+}
+
+
+/*.page {
+  width: 1200px;
+}
+*/
+#main {
+  border: solid 2px white;
+  width: 1000px;
+  height: 600px;
+  position: relative;
+  margin: 0 auto 0 auto;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 255, 0.5);
+}
+
+body {
+  color: white;
+  background-color: black;
+}
+
+#rocketwagon-canvas {
+  width: 500;
+  height: 500;
+}
+
+.container {
+  position: relative;
+  /*max-width: 1400px;*/
+  background-color: transparent;
+}
+
+.buttons {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+button {
+  background-color: transparent;
+  border: solid 2px rgba(255, 0, 0, 0.5);
+}
+
+/* d3 */
+
+.link {
+  stroke: #aaa;
+}
+
+.node text {
+  stroke:#333;
+  cursos:pointer;
+}
+
+.node circle {
+  stroke:#fff;
+  stroke-width:3px;
+  fill:#555;
+}
