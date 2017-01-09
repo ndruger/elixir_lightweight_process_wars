@@ -6,7 +6,7 @@
     <canvas></canvas>
     <div id="svg-main"></div>
     <div class="buttons">
-      <button class="create-simple-one-for-one-enemy">Simple-One-For-One Enemy</button>
+      <div class="create-simple-one-for-one-enemy button">Simple-One-For-One Enemy</div>
     </div>
   </div>
 </div>

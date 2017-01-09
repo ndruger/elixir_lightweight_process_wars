@@ -14,14 +14,19 @@ defmodule ProcessWars.RoomChannel do
 
   def handle_in("kill", %{"pid" => pid_str}, socket) do
     pid = Pid.from_str(pid_str)
-    IO.inspect(Process.info(pid))
-    Process.exit(pid, :kill)
+    EnemyFactory.delete(pid)
     {:noreply, socket}
   end
 
   def handle_in("create_enemy", %{"type" => type}, socket) do
     IO.inspect(["create_enemy", type])
     EnemyFactory.create(type)
+    {:noreply, socket}
+  end
+
+  def handle_in("reset", %{}, socket) do
+    IO.inspect(["reset"])
+    EnemyFactory.reset()
     {:noreply, socket}
   end
 

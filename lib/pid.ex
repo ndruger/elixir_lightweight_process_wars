@@ -1,3 +1,5 @@
+use Croma
+
 defmodule ProcessWars.Pid do
   def pid_to_string(pid) when is_pid(pid) do
     pid |> :erlang.pid_to_list |> to_string
@@ -23,7 +25,7 @@ defmodule ProcessWars.Pid do
     end
   end
 
-  def from_str(pid_str) do
+  defun from_str(pid_str :: String.t) :: pid do
     pid_str |> String.to_charlist |> :erlang.list_to_pid
   end
 

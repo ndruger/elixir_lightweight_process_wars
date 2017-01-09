@@ -1,10 +1,10 @@
 // @flow
 import 'phoenix_html';
 import {Socket} from 'phoenix';
-import _ from 'lodash';
+// import _ from 'lodash';
 // import * as d3 from 'd3';
 
-import World from './world';
+import World from './World';
 
 const socket = new Socket('/socket', {params: {token: window.userToken}});
 
@@ -17,9 +17,8 @@ const messagesContainer = $('#messages');
 socket.connect();
 const chan = socket.channel('room:game', {});
 
-chatInput.on('keypress', event => {
-  if(event.keyCode === 13){
-    console.log(event);
+chatInput.on('keypress', (e: Object) => {
+  if(e.keyCode === 13){
     chan.push('create_enemy', {type: 'simple_one_for_one'});
     // chan.push("kill", {body: chatInput.val()})
     // chan.push("kill", {body: chatInput.val()})
@@ -27,7 +26,7 @@ chatInput.on('keypress', event => {
   }
 });
 
-chan.on('new_msg', payload => {
+chan.on('new_msg', (payload: Object) => {
   console.log(payload);
   messagesContainer.append(`<br/>${JSON.stringify(payload.body)}`);
 });
@@ -41,30 +40,42 @@ chan.on('new_msg', payload => {
 //   return `<${safeId.replace(/_/g, '.')}>`;
 // }
 
-let oldProcesses = [];
-chan.on('processes', ({processes}) => {
-  console.log(JSON.stringify(_.differenceBy(processes, oldProcesses, 'id')));
-  oldProcesses = processes;
-  const enemyProcesses = _.filter(processes, (process) => {
-    return _.startsWith(process.name, 'enemy');
-  });
-  console.log(enemyProcesses);
-});
 
-chan.join().receive('ok', () => {
-  console.log('Welcome to Phoenix Chat!');
-});
 
 $(() => {
-  const world = new World();
- 
-  $('.create-simple-one-for-one-enemy').on('click', () => {
-    chan.push('create_enemy', {type: 'simple_one_for_one'});
-  });
+  chan.join().receive('ok', () => {
+    console.log('joined');
+    chan.push('reset', {});
 
-  var draw = SVG('svg-main').size(MAIN_WIDTH, MAIN_HEIGHT);
-  var text = draw.text('SVG.JS').move(300, 0);
-  text.font({size: 180});
+    var svg = SVG('svg-main').size(MAIN_WIDTH, MAIN_HEIGHT);
+    var text = svg.text('SVG.JS').move(300, 0);
+    text.font({size: 180});
+
+    const world = new World({
+      width: MAIN_WIDTH,
+      height: MAIN_HEIGHT,
+      svg: svg,
+      killProcess: (id: string) => {
+        chan.push('kill', {pid: id});
+      }
+    });
+   
+    $('.create-simple-one-for-one-enemy').on('click', () => {
+      chan.push('create_enemy', {type: 'simple_one_for_one'});
+    });
+
+
+    // let oldProcesses = [];
+    chan.on('processes', ({processes}: {processes: Array<Object>}) => {
+      // console.log(JSON.stringify(_.differenceBy(processes, oldProcesses, 'id')));
+      // oldProcesses = processes;
+      // const enemyProcesses = _.filter(processes, (process) => {
+      //   return _.startsWith(process.name, 'enemy');
+      // });
+      // console.log(enemyProcesses);
+      world.updateEnemies(processes);
+    });
+  });
 
   // $('body').starfield({
   //   seedMovement: true

@@ -1,3 +1,5 @@
+use Croma
+
 # {:ok, pid} = ProcessWars.SimpleOneForOneEnemy.start_link()
 # Supervisor.which_children(pid)
 # {_, c_pid, _, _} = Supervisor.which_children(pid) |> Enum.at(0)
@@ -19,11 +21,12 @@ defmodule ProcessWars.SimpleOneForOneEnemy do
     Supervisor.start_link(__MODULE__, [name], name: name) |> IO.inspect()
   end
 
-  def create_child(self_pid) do
-    name = EnemyUtil.build_name("simpleOneForOneChild", true)
+  defun create_child(self_pid :: pid) :: nil do
     if Process.alive?(self_pid) do
+      name = EnemyUtil.build_child_name(self_pid)
       Supervisor.start_child(self_pid, [name])
     end
+    nil
   end
 
   def init(_args) do

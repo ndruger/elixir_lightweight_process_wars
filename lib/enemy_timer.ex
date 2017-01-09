@@ -7,7 +7,6 @@ defmodule ProcessWars.EnemyTimer do
   end
 
   def init(state) do
-    # process_flag(trap_exit, true).
     Process.flag(:trap_exit, true)
     schedule()
     {:ok, state}
