@@ -44,8 +44,6 @@ Linkされてないプロセス。ショットで倒せば復活しない。
 
 Let crash it!!
 
-フロントエンドがサーバと通信できなくなったらボスの破壊に成功したとみなされてGame Clearになります。
-
 ## 利用している画像
 
 このゲームは<a href="http://mfstg.web.fc2.com/index.html">http://mfstg.web.fc2.com/index.html"</a>で配布されている素材(`priv/static/vendor/images/mfstg`)を利用しています。
