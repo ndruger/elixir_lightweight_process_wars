@@ -1,5 +1,3 @@
-use Croma
-
 defmodule ProcessWars.Pid do
   def pid_to_string(pid) when is_pid(pid) do
     pid |> :erlang.pid_to_list |> to_string
@@ -13,25 +11,25 @@ defmodule ProcessWars.Pid do
     %{
       id: pid_to_string(pid),
       name: name(pid),
-      links: links(pid) |> Enum.map(&pid_to_string/1),
+      links: pid |> links |> Enum.map(&pid_to_string/1),
     }
   end
 
   def name(pid) when is_pid(pid) do
     case Process.info(pid, :registered_name) do
       {:registered_name, []} -> ""
-      {:registered_name, name} -> name
+      {:registered_name, v} -> v
       _ -> ""
     end
   end
 
-  defun from_str(pid_str :: String.t) :: pid do
+  def from_str(pid_str) do
     pid_str |> String.to_charlist |> :erlang.list_to_pid
   end
 
   def links(pid) when is_pid(pid) do
     case Process.info(pid, :links) do
-      {:links, links} -> links
+      {:links, v} -> v
       _ -> []
     end
   end

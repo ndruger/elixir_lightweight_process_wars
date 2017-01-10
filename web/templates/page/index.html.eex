@@ -1,12 +1,13 @@
 <div class="page">
-<%#   <div id="messages"></div>
-  <input id="chat-input" type="text"></input>
- %>
   <div id="main">
     <canvas></canvas>
     <div id="svg-main"></div>
     <div class="buttons">
-      <div class="create-simple-one-for-one-enemy button">Simple-One-For-One Enemy</div>
-    </div>
+      <div class="enemy-creation-button button" data-enemy-type="spawn">Spawn</div>
+      <div class="enemy-creation-button button" data-enemy-type="simple_one_for_one">Supervisor(:simple_one_for_one)</div>
+      <div class="enemy-creation-button button" data-enemy-type="one_for_all">Supervisor(:one_for_all)</div>
+<%#       <div class="enemy-creation-button button" data-enemy-type="dynamic_atom_creator">Danger</div>
+      <div class="enemy-creation-button button" data-enemy-type="boss">Boss</div>
+ %>    </div>
   </div>
 </div>

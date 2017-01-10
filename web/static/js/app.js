@@ -60,9 +60,8 @@ $(() => {
       $el: $('#main'),
     });
    
-    $('.create-simple-one-for-one-enemy').on('click', () => {
-      // chan.push('create_enemy', {type: 'simple_one_for_one'});
-      chan.push('create_enemy', {type: 'one_for_all'});
+    $('.enemy-creation-button').click((e: Object) => {
+      chan.push('create_enemy', {type: $(e.target).data('enemyType')});
     });
 
 

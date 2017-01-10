@@ -1,55 +1,35 @@
-use Croma
-
-# {:ok, pid} = ProcessWars.EnemySimpleOneForOne.start_link()
-# Supervisor.which_children(pid)
-# {_, c_pid, _, _} = Supervisor.which_children(pid) |> Enum.at(0)
-# Process.info(c_pid)
-# Process.exit(c_pid, :kill)
-
-# {:ok, pid} = ProcessWars.EnemySimpleOneForOne.start_link()
-# Process.unlink(pid)
-# Process.exit(pid, :kill)
-
-defmodule ProcessWars.EnemyOneForAll do
-  use Supervisor
-
-  alias ProcessWars.EnemyChild
+defmodule ProcessWars.EnemySpawn do
   alias ProcessWars.EnemyUtil
 
-  def start_link do
-    name = EnemyUtil.build_name("oneForAll")
-    Supervisor.start_link(__MODULE__, [name], name: name) |> IO.inspect()
+  def start do
+    pid = spawn(fn -> loop end)
+    Process.register(pid, EnemyUtil.build_name("spawn"))
+    pid
   end
 
-  def init([name]) do
-    children = for _ <- 1..4 do
-      id = EnemyUtil.build_child_name(name)
-      worker(EnemyChild, [id], restart: :permanent, id: id)
-    end
-    options = [
-      strategy: :one_for_all,
-    ]
-    supervise(children, options)
+  defp loop do
+    receive do
+      {:puts, msg} ->
+        IO.puts(msg)
+        loop
+    end    
   end
 end
 
 defmodule ProcessWars.EnemySimpleOneForOne do
   use Supervisor
-
-  alias ProcessWars.EnemyChild
-  alias ProcessWars.EnemyUtil
+  alias ProcessWars.{EnemyChild, EnemyUtil}
 
   def start_link do
     name = EnemyUtil.build_name("simpleOneForOne")
-    Supervisor.start_link(__MODULE__, [name], name: name) |> IO.inspect()
+    Supervisor.start_link(__MODULE__, [name], name: name)
   end
 
-  defun create_child(self_pid :: pid) :: nil do
+  def create_child(self_pid) do
     if Process.alive?(self_pid) do
       name = EnemyUtil.build_child_name(self_pid)
       Supervisor.start_child(self_pid, [name])
     end
-    nil
   end
 
   def init(_args) do
@@ -60,6 +40,27 @@ defmodule ProcessWars.EnemySimpleOneForOne do
     ]
     options = [
       strategy: :simple_one_for_one,
+    ]
+    supervise(children, options)
+  end
+end
+
+defmodule ProcessWars.EnemyOneForAll do
+  use Supervisor
+  alias ProcessWars.{EnemyChild, EnemyUtil}
+
+  def start_link do
+    name = EnemyUtil.build_name("oneForAll")
+    Supervisor.start_link(__MODULE__, [name], name: name)
+  end
+
+  def init([name]) do
+    children = for _ <- 1..4 do
+      id = EnemyUtil.build_child_name(name)
+      worker(EnemyChild, [id], restart: :permanent, id: id)
+    end
+    options = [
+      strategy: :one_for_all,
     ]
     supervise(children, options)
   end

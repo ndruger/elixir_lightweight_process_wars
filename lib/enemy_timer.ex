@@ -13,9 +13,7 @@ defmodule ProcessWars.EnemyTimer do
   end
 
   def handle_info(:publish, state) do
-    Enum.map(state.subscribers, fn {module, method_name, args} ->
-      apply(module, method_name, args)
-    end)
+    Enum.each(state.subscribers, fn {module, method_name, args} -> apply(module, method_name, args) end)
     schedule
     {:noreply, state}
   end

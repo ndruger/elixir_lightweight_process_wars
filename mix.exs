@@ -35,7 +35,6 @@ defmodule ProcessWars.Mixfile do
     [
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.4.12", only: :dev},
-      {:croma, "~> 0.4.4"},
       {:dialyze, "~> 0.2.1", only: :dev},
       {:gettext, "~> 0.11"},
       {:phoenix, "~> 1.2.1"},

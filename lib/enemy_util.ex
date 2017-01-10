@@ -1,15 +1,13 @@
-use Croma
-
 defmodule ProcessWars.EnemyUtil do
   alias ProcessWars.Pid
 
   @re ~r/(?<prefix>.+)_(?<type>.+)_(?<parent_id>.+)(_(?<child_id>.+))?/
 
-  defun random_str() :: String.t do
+  def random_str() do
     UUID.uuid4() |> String.split("-") |> List.last
   end
 
-  defun build_name(type :: v[String.t]) :: atom do
+  def build_name(type) do
     "enemy_#{type}_#{random_str}" |> String.to_atom
   end
 
@@ -24,9 +22,9 @@ defmodule ProcessWars.EnemyUtil do
   end
 
   def prefix(pid) when is_pid(pid) do
-    name = Pid.name(pid) |> to_string
+    name = pid |> Pid.name |> to_string
     case Regex.named_captures(@re, name) do
-      %{"prefix" => prefix} -> prefix
+      %{"prefix" => v} -> v
       _ -> ""
     end
   end
