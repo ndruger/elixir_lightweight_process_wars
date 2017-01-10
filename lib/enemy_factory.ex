@@ -1,10 +1,15 @@
 defmodule ProcessWars.EnemyFactory do
-  alias ProcessWars.{EnemyUtil, EnemyMonitor, EnemySimpleOneForOne, EnemyOneForAll, EnemySpawn}
+  alias ProcessWars.{EnemyUtil, EnemyMonitor, EnemySimpleOneForOne, EnemyOneForAll, EnemySpawn, EnemyDynamicAtomCreator}
   require Logger
 
   def create("spawn") do
     pid = EnemySpawn.start()
     Logger.debug("EnemyFactory.create: spawn: #{Process.info(pid) |> inspect}")
+  end
+
+  def create("dynamic_atom_creator") do
+    pid = EnemyDynamicAtomCreator.start()
+    Logger.debug("EnemyFactory.create: dynamic_atom_creator: #{Process.info(pid) |> inspect}")
   end
 
   def create("simple_one_for_one") do

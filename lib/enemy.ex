@@ -16,6 +16,24 @@ defmodule ProcessWars.EnemySpawn do
   end
 end
 
+defmodule ProcessWars.EnemyDynamicAtomCreator do
+  alias ProcessWars.EnemyUtil
+  require Logger;
+
+  def start do
+    pid = spawn(fn -> loop end)
+    Process.register(pid, EnemyUtil.build_name("dynamicAtomCreator"))
+    pid
+  end
+
+  defp loop do
+    :timer.sleep(:timer.seconds(1))
+    Logger.debug("EnemyDynamicAtomCreator.loop: #{:erlang.memory(:atom)}")
+    for _ <- 1..10000 do UUID.uuid4() |> String.to_atom end
+    loop
+  end
+end
+
 defmodule ProcessWars.EnemySimpleOneForOne do
   use Supervisor
   alias ProcessWars.{EnemyChild, EnemyUtil}

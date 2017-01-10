@@ -1,13 +1,14 @@
 <div class="page">
   <div id="main">
+    <div class="atom-memory-bar"></div>
     <canvas></canvas>
     <div id="svg-main"></div>
     <div class="buttons">
       <div class="enemy-creation-button button" data-enemy-type="spawn">Spawn</div>
       <div class="enemy-creation-button button" data-enemy-type="simple_one_for_one">Supervisor(:simple_one_for_one)</div>
       <div class="enemy-creation-button button" data-enemy-type="one_for_all">Supervisor(:one_for_all)</div>
-<%#       <div class="enemy-creation-button button" data-enemy-type="dynamic_atom_creator">Danger</div>
+      <div class="enemy-creation-button button hidden" data-enemy-type="dynamic_atom_creator">Dynamic Atom Creator</div>
       <div class="enemy-creation-button button" data-enemy-type="boss">Boss</div>
- %>    </div>
+    </div>
   </div>
 </div>

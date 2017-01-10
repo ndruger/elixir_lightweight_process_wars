@@ -66,7 +66,9 @@ $(() => {
 
 
     // let oldProcesses = [];
-    chan.on('processes', ({processes}: {processes: Array<Object>}) => {
+    chan.on('processes', ({processes, atomMemory}: {processes: Array<Object>}) => {
+      const atomMemoryPercent = atomMemory / 51658249 * 30;
+      $('.atom-memory-bar').css({width: `${atomMemoryPercent}%`});
       // console.log(JSON.stringify(_.differenceBy(processes, oldProcesses, 'id')));
       // oldProcesses = processes;
       // const enemyProcesses = _.filter(processes, (process) => {
@@ -88,6 +90,9 @@ $(() => {
     $('body').starfield({
       seedMovement: true
     });
+  }
+  if (location.search.includes('danger')) {
+    $('.enemy-creation-button.hidden').removeClass('hidden');
   }
 });
 
