@@ -8,7 +8,7 @@
       <div class="enemy-creation-button button" data-enemy-type="simple_one_for_one">Supervisor(:simple_one_for_one)</div>
       <div class="enemy-creation-button button" data-enemy-type="one_for_all">Supervisor(:one_for_all)</div>
       <div class="enemy-creation-button button hidden" data-enemy-type="dynamic_atom_creator">Dynamic Atom Creator</div>
-      <div class="enemy-creation-button button" data-enemy-type="boss">Boss</div>
+      <div class="enemy-creation-button button" data-enemy-type="boss">Boss(実装中)</div>
     </div>
   </div>
 </div>
