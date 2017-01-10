@@ -8,7 +8,7 @@ defmodule ProcessWars.EnemyUtil do
   end
 
   def build_name(type) do
-    "enemy_#{type}_#{random_str}" |> String.to_atom
+    "enemy_#{type}_#{random_str}" |> String.to_atom # will eat up atom table index on looooooong feature
   end
 
   def build_child_name(parent_pid) when is_pid(parent_pid) do
@@ -18,7 +18,7 @@ defmodule ProcessWars.EnemyUtil do
   def build_child_name(parent_name) when is_atom(parent_name) do
     parent_name_str = parent_name |> to_string
     %{"type" => type, "parent_id" => parent_id} = Regex.named_captures(@re, parent_name_str)
-    "enemyChild_#{type}_#{parent_id}_#{random_str}" |> String.to_atom
+    "enemyChild_#{type}_#{parent_id}_#{random_str}" |> String.to_atom # will eat up atom table index on looooooong feature
   end
 
   def prefix(pid) when is_pid(pid) do
