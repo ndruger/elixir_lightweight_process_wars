@@ -2,7 +2,7 @@
 
 import Movable from './Movable';
 import World from './World';
-import {Position} from './Types';
+import type {Position} from './Types';
 
 class PlayerShot extends Movable {
   _speed: number = 0.5;

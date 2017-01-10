@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import World from './World';
 import EnemyBase from './EnemyBase';
-import {Position} from './Types';
+import type {Position} from './Types';
 
 class EnemyChild extends EnemyBase {
   _speed: number =  0.1;

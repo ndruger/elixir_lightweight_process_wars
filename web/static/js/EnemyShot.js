@@ -2,11 +2,13 @@
 
 import Movable from './Movable';
 import World from './World';
-import {Position} from './Types';
+import type {Position} from './Types';
 
 class EnemyShot extends Movable {
   _speed: number = 0.3;
   id: string;
+  _dx: number;
+  _dy: number;
 
   constructor({id, x, y, svg, world, targetPos}: {id: string, x: number, y: number, svg: Object, world: World, targetPos: Position}) {
     super({svg, world});

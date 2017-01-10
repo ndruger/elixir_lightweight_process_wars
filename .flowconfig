@@ -7,6 +7,7 @@
 web/**/*.js
 
 [libs]
+types
 
 [options]
 suppress_comment= \\(.\\|\n\\)*\\$Flow

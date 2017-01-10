@@ -14,7 +14,7 @@ class Movable {
     this._world = world;
   }
 
-  move() {
+  move(_progress: number) {
     console.assert(false);
   }
 

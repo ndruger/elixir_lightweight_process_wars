@@ -8,7 +8,7 @@ import Enemy from './Enemy';
 import EnemyChild from './EnemyChild';
 import PlayerShot from './PlayerShot';
 import EnemyShot from './EnemyShot';
-import {Position} from './Types';
+import type {Position} from './Types';
 
 class World {
   _player: Object;
