@@ -13,9 +13,18 @@ const dirMap = {
 };
 
 class KeyManager {
-  _isPressed = {}
+  static dirStrMap = {
+    [LEFT]: 'left',
+    [UP]: 'up',
+    [DOWM]: 'down',
+    [RIGHT]: 'right',
+  };
 
-  constructor() {
+  _isPressed = {};
+  _update: Function;
+
+  constructor({update}: {update: Function}) {
+    this._update = update;
     $(window).keydown((e: Object) => {
       const d = dirMap[e.keyCode];
       if (!d) {
@@ -23,6 +32,7 @@ class KeyManager {
       }
       e.preventDefault();
       this._isPressed[e.keyCode] = true;
+      this._onUpdate();
     });
     $(window).keyup((e: Object) => {
       const d = dirMap[e.keyCode];
@@ -31,6 +41,7 @@ class KeyManager {
       }
       e.preventDefault();
       delete this._isPressed[e.keyCode];
+      this._onUpdate();
     });
   }
   
@@ -39,6 +50,11 @@ class KeyManager {
       const d = dirMap[key];
       return {x: acc.x + d.x, y: acc.y + d.y};
     }, {x: 0, y: 0});
+  }
+
+  _onUpdate() {
+    const dir = _.isEmpty(this._isPressed) ? -1 : parseInt(_.first(_.keys(this._isPressed)), 10);
+    this._update(dir);
   }
 }
 

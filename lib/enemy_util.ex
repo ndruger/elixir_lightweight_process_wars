@@ -13,9 +13,13 @@ defmodule ProcessWars.EnemyUtil do
     "enemy_#{type}_#{random_str}" |> String.to_atom
   end
 
-  defun build_child_name(parent_pid :: v[pid]) :: atom do
-    parent_name = Pid.name(parent_pid) |> to_string
-    %{"type" => type, "parent_id" => parent_id} = Regex.named_captures(@re, parent_name)
+  def build_child_name(parent_pid) when is_pid(parent_pid) do
+    build_child_name(Pid.name(parent_pid))
+  end
+
+  def build_child_name(parent_name) when is_atom(parent_name) do
+    parent_name_str = parent_name |> to_string
+    %{"type" => type, "parent_id" => parent_id} = Regex.named_captures(@re, parent_name_str)
     "enemyChild_#{type}_#{parent_id}_#{random_str}" |> String.to_atom
   end
 

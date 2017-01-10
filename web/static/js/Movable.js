@@ -7,6 +7,7 @@ class Movable {
   _y: number;
   _world: World;
   _el: Object;
+  _$el: Object;
 
   constructor({svg, world}: {svg: Object, world: World}) {
     this._svg = svg;
@@ -22,7 +23,12 @@ class Movable {
   }
 
   destroy() {
-    this._el.remove();
+    if (this._el) {
+      this._el.remove();
+    }
+    if (this._$el) {
+      this._$el.remove();
+    }
   }
 }
 

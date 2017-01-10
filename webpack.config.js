@@ -26,8 +26,6 @@ module.exports = {
     loaders: [
       {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/},
       {test: /\.scss$/, loaders: ['style-loader', 'css-loader', 'sass-loader']},
-      {test: /\.png$/, loader: 'file-loader'},
-      {test: /\.jpg$/, loader: 'file-loader'},
     ],
   },
   plugins: (function() {

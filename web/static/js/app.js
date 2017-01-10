@@ -18,14 +18,14 @@ const messagesContainer = $('#messages');
 socket.connect();
 const chan = socket.channel('room:game', {});
 
-chatInput.on('keypress', (e: Object) => {
-  if(e.keyCode === 13){
-    chan.push('create_enemy', {type: 'simple_one_for_one'});
-    // chan.push("kill", {body: chatInput.val()})
-    // chan.push("kill", {body: chatInput.val()})
-    chatInput.val('');
-  }
-});
+// chatInput.on('keypress', (e: Object) => {
+//   if(e.keyCode === 13){
+//     chan.push('create_enemy', {type: 'simple_one_for_one'});
+//     // chan.push("kill", {body: chatInput.val()})
+//     // chan.push("kill", {body: chatInput.val()})
+//     chatInput.val('');
+//   }
+// });
 
 chan.on('new_msg', (payload: Object) => {
   console.log(payload);
@@ -49,8 +49,6 @@ $(() => {
     chan.push('reset', {});
 
     var svg = SVG('svg-main').size(MAIN_WIDTH, MAIN_HEIGHT);
-    var text = svg.text('SVG.JS').move(300, 0);
-    text.font({size: 180});
 
     const world = new World({
       width: MAIN_WIDTH,
@@ -58,11 +56,13 @@ $(() => {
       svg: svg,
       killProcess: (safeId: string) => {
         chan.push('kill', {pid: Pid.toUnSafe(safeId)});
-      }
+      },
+      $el: $('#main'),
     });
    
     $('.create-simple-one-for-one-enemy').on('click', () => {
-      chan.push('create_enemy', {type: 'simple_one_for_one'});
+      // chan.push('create_enemy', {type: 'simple_one_for_one'});
+      chan.push('create_enemy', {type: 'one_for_all'});
     });
 
 
@@ -78,6 +78,7 @@ $(() => {
         return {
           ...process,
           id: Pid.toSafe(process.id),
+          links: _.map(process.links, (id) => Pid.toSafe(id)),
         };
       });
       world.updateEnemies(safeProcesses);

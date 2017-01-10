@@ -17,3 +17,7 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
   * Docs: https://hexdocs.pm/phoenix
   * Mailing list: http://groups.google.com/group/phoenix-talk
   * Source: https://github.com/phoenixframework/phoenix
+
+## 画像
+
+このゲームは<a href="http://mfstg.web.fc2.com/index.html">http://mfstg.web.fc2.com/index.html"</a>で配布されている画像(`priv/static/vendor/images/mfstg`)を利用しています。

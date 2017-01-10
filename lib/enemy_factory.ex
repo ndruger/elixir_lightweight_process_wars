@@ -1,11 +1,17 @@
 use Croma
 
 defmodule ProcessWars.EnemyFactory do
-  alias ProcessWars.EnemyUtil
-  alias ProcessWars.EnemyMonitor
+  alias ProcessWars.{EnemyUtil, EnemyMonitor, EnemySimpleOneForOne, EnemyOneForAll}
 
   def create("simple_one_for_one") do
-    {:ok, pid} = ProcessWars.SimpleOneForOneEnemy.start_link()
+    {:ok, pid} = EnemySimpleOneForOne.start_link()
+    IO.inspect(["EnemyFactory.create", Process.info(pid)])
+    Process.unlink(pid)
+  end
+
+  def create("one_for_all") do
+    IO.inspect("nekoneko")
+    {:ok, pid} = EnemyOneForAll.start_link()
     IO.inspect(["EnemyFactory.create", Process.info(pid)])
     Process.unlink(pid)
   end
@@ -22,6 +28,6 @@ defmodule ProcessWars.EnemyFactory do
   defun delete(pid :: v[pid]) :: boolean do
     IO.inspect(["EnemyFactory.delete", Process.info(pid)])
     Process.exit(pid, :kill)
-    send(ProcessWars.EnemyMonitor, :publish)
+    send(EnemyMonitor, :publish)
   end
 end

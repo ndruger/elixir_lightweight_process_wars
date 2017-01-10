@@ -1,16 +1,39 @@
 use Croma
 
-# {:ok, pid} = ProcessWars.SimpleOneForOneEnemy.start_link()
+# {:ok, pid} = ProcessWars.EnemySimpleOneForOne.start_link()
 # Supervisor.which_children(pid)
 # {_, c_pid, _, _} = Supervisor.which_children(pid) |> Enum.at(0)
 # Process.info(c_pid)
 # Process.exit(c_pid, :kill)
 
-# {:ok, pid} = ProcessWars.SimpleOneForOneEnemy.start_link()
+# {:ok, pid} = ProcessWars.EnemySimpleOneForOne.start_link()
 # Process.unlink(pid)
 # Process.exit(pid, :kill)
 
-defmodule ProcessWars.SimpleOneForOneEnemy do
+defmodule ProcessWars.EnemyOneForAll do
+  use Supervisor
+
+  alias ProcessWars.EnemyChild
+  alias ProcessWars.EnemyUtil
+
+  def start_link do
+    name = EnemyUtil.build_name("oneForAll")
+    Supervisor.start_link(__MODULE__, [name], name: name) |> IO.inspect()
+  end
+
+  def init([name]) do
+    children = for _ <- 1..4 do
+      id = EnemyUtil.build_child_name(name)
+      worker(EnemyChild, [id], restart: :permanent, id: id)
+    end
+    options = [
+      strategy: :one_for_all,
+    ]
+    supervise(children, options)
+  end
+end
+
+defmodule ProcessWars.EnemySimpleOneForOne do
   use Supervisor
 
   alias ProcessWars.EnemyChild
@@ -36,7 +59,7 @@ defmodule ProcessWars.SimpleOneForOneEnemy do
       worker(EnemyChild, [], restart: :permanent)
     ]
     options = [
-      strategy: :simple_one_for_one
+      strategy: :simple_one_for_one,
     ]
     supervise(children, options)
   end

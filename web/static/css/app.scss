@@ -14,13 +14,63 @@
   height: 600px;
   position: relative;
   margin: 0 auto 0 auto;
+  overflow: hidden;
 }
 
 svg {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 255, 0.5);
+}
+
+@mixin explocation {
+  width: 32px;
+  height: 32px;
+  background-image: url('/vendor/images/mfstg/explosion.png');
+  background-size: cover;
+  background-position: top left;
+}
+
+.enemy {
+  background-image: url('/vendor/images/mfstg/enemy.png');
+  position: absolute;
+  $width: 36px;
+  $height: 32px;
+  width: $width;
+  height: $height;
+  &.explosion {
+    @include explocation;
+  }
+}
+
+.enemy-child {
+  background-image: url('/vendor/images/mfstg/enemy_child.png');
+  position: absolute;
+  $width: 32px;
+  $height: 32px;
+  width: $width;
+  height: $height;
+  &.explosion {
+    @include explocation;
+  }
+}
+
+.player {
+  background-image: url('/vendor/images/mfstg/player.png');
+  position: absolute;
+  $width: 36px;
+  $height: 32px;
+  width: $width;
+  height: $height;
+  &.left {
+    background-position: 0 (-$height * 4) ;
+  }
+  &.right {
+    background-position: 0 (-$height * 2) ;
+  }
+  &.explosion {
+    @include explocation;
+  }
 }
 
 body {
@@ -50,6 +100,13 @@ body {
   border: solid 2px rgba(255, 0, 0, 0.5);
 }
 
+.image-copyright {
+  text-align: center;
+  color: #aaa;
+  a {
+    color: #770;
+  }
+}
 /* d3 */
 
 .link {

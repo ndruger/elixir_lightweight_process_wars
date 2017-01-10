@@ -16,6 +16,9 @@
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
       </main>
+      <div class="image-copyright">
+        このゲームは<a href="http://mfstg.web.fc2.com/index.html">http://mfstg.web.fc2.com/index.html"</a>で配布されている画像を利用しています。
+      </div>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="<%= static_path(@conn, "/vendor/svg.min.js") %>"></script>

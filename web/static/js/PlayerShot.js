@@ -13,7 +13,7 @@ class PlayerShot extends Movable {
     this._x = x;
     this._y = y;
     this.id = id;
-    this._el = svg.circle(5)
+    this._el = svg.circle(10)
       .addClass('playerShot')
       .fill('#0ff')
       .move(this._x, this._y);
