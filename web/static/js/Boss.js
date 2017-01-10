@@ -14,7 +14,7 @@ export function boss(chan) {
   let nodes;
   let links;
 
-  chan.on('processes', ({processes}) => {
+  function onUpdatedProcesses(processes) {
     // if (nodes) {
     //   return;
     // }
@@ -25,11 +25,6 @@ export function boss(chan) {
         name: process.name,
       };
     });
-
-    // const els = _.map(processes, (process) => {
-    //   return $('<div>')
-    //     .text(process.name);
-    // });
 
     const newLinks = _.flatMap(processes, (process,) => {
       const subLinks = _.map(process.links, (link) => {
@@ -52,7 +47,7 @@ export function boss(chan) {
       const remainedNodes = _.intersectionBy(_.clone(nodes), newNodes, 'id');
       const createdLinks = _.pullAllBy(_.clone(newLinks), links, (link) => _.pick(link, ['sourceId', 'taregetId']));
       const remainedLinks = _.pullAllBy(_.clone(links), newLinks, (link) => _.pick(link, ['sourceId', 'taregetId']));
-      console.log(_.difference(nodes, remainedNodes));
+      // console.log(_.difference(nodes, remainedNodes));
       nodes = remainedNodes.concat(createdNodes);
       // links = remainedLinks.concat(createdLinks);
       // nodes = remainedNodes;
@@ -63,11 +58,13 @@ export function boss(chan) {
       nodes = newNodes;
       links = newLinks;
     }
-    update(nodes, links);
+    updateView(nodes, links);
     // console.log(payload)
+  }
+
+  chan.on('processes', ({processes}) => {
+    onUpdatedProcesses(processes);
   });
-
-
 
   var width = $( window ).width(),
     height = $( window ).height();
@@ -82,18 +79,7 @@ export function boss(chan) {
       .charge(-100)
       .size([width, height]);
 
-    // force
-    //     .nodes(nodeModels)
-    //     .links(linkModels)
-    //     .start();
-
-  function update(nodeModels, linkModels) {
-    // force
-    //     .nodes(nodeModels)
-    //     .links(linkModels)
-    //     .start();
-
-
+  function updateView(nodeModels, linkModels) {
     const selection = svg.selectAll('.node')
       // .data(nodeModels, function(d) {return d.id;});
       .data(nodeModels);
@@ -116,19 +102,21 @@ export function boss(chan) {
           //   name: Math.random() + '',
           // });
           // update(nodes, links);
-          console.log(d.id);
-          chan.push('kill', {pid: toId(d.id)});
+          // console.log(d.id);
+
+          // chan.push('kill', {pid: toId(d.id)});
         })
         .call(force.drag);
 
     entered.append('circle')
-      .attr('r','5');
-      // .style("fill", function(d) { return '#'+Math.random().toString(16).substr(-6); })
+      .attr('r','5')
+      .style('fill', function() { return '#'+Math.random().toString(16).substr(-6);});
 
     entered.append('text')
         .attr('dx', 12)
         .attr('dy', '.35em')
-        .text(function(d) { return d.name; });
+        .text(function(d) { return d.name; })
+        .style('fill', function() { return '#'+Math.random().toString(16).substr(-6);});
 
     var link = svg.selectAll('.link')
         .data(linkModels);
@@ -151,8 +139,6 @@ export function boss(chan) {
           .attr('x2', function(d) { return d.target.x; })
           .attr('y2', function(d) { return d.target.y; });
 
-    // entered.attr("cx", function(d) { return d.x; })
-    //     .attr("cy", function(d) { return d.y; })
       selection.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
     });
   }

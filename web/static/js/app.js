@@ -45,7 +45,6 @@ $(() => {
       $el: $('#main'),
     });
 
-    let oldProcesses = [];
     chan.on('processes', ({processes, atomMemory}: {processes: Array<Object>}) => {
       const atomMemoryPercent = atomMemory / 51658249 * 30;
       $('.atom-memory-bar').css({width: `${atomMemoryPercent}%`});
@@ -57,13 +56,6 @@ $(() => {
         };
       });
       world.updateEnemies(safeProcesses);
-
-      console.log(JSON.stringify(_.differenceBy(processes, oldProcesses, 'id')));
-      oldProcesses = processes;
-      const enemyProcesses = _.filter(processes, (process) => {
-        return _.startsWith(process.name, 'enemy');
-      });
-      console.log(enemyProcesses);
     });
   });
 });
